@@ -1,0 +1,75 @@
+.addMessage {
+    padding-top: 30px;
+}
+
+
+
+.dialogsList {
+display: grid;
+    /*grid-template-areas:*/
+    /*'h c';*/
+    grid-template-columns: 3fr 10fr;   /*  автоматом делит на 2 части (у нас 2 элемента в дивке dialogsList   */
+}
+
+.dialogsList .chatList {
+    padding-left: 40px;
+}
+
+
+.dialogsList .dialogsItems {
+    /*grid-area: h;*/
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 30px;
+    border-right: 2px solid
+    
+}
+
+.dialog .avatar {    /*Navlink = <a> </a>*/
+    text-decoration: none;
+    
+}
+
+
+.dialog .name {    /*Navlink = <a> </a>*/
+color: gold;
+text-decoration: none;
+padding-left: 10px;
+}
+
+.chatList {
+    /*grid-area: c;*/
+    padding: 15px;
+
+}
+
+/* .dialogsItems img {
+width: 40px;
+height: 40px;
+border-radius: 20px;
+padding-top: 10px;
+
+}  */
+
+.dialog img {
+    width: 40px;
+height: 40px;
+border-radius: 20px;
+padding-top: 10px;
+}
+
+.message img {
+    width: 40px;
+height: 40px;
+border-radius: 20px;
+padding-top: 10px;
+}
+
+.textarea {
+    width:  200px;
+    height: 15px;
+    padding: 5px 10px 5px 10px;
+    border:1px solid #999;
+    font-size:16px;
+    font-family: Tahoma;
+}

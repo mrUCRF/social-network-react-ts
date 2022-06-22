@@ -1,0 +1,14 @@
+.socialNetwork a {
+    padding-right: 20px;
+    
+    }
+        
+    .userAvatar {
+        width: 220px;
+        height: 220px ;
+        border-radius: 150px;
+    }
+    
+    .contact {
+        padding-left: 10px;
+    }

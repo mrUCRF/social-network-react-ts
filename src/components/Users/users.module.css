@@ -1,0 +1,10 @@
+.userAvatar {
+    width: 80px;
+    height: 80px ;
+    border-radius: 150px;
+}
+
+.selectedPage {
+    font-weight: bold;
+    cursor: auto;
+}
