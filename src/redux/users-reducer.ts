@@ -19,10 +19,14 @@ const initialState = {
     currentPage: 1 as number,
     isFetching: false as boolean,
     followingInProgress: [] as Array<number>, //array of usersID
-    portionSize: 10 as number
+    portionSize: 10 as number,
+    filter: {
+        term: '',
+        friend: null as null | boolean
+    }
 }
 export type initialStateUsersType = typeof initialState
-
+export type FilterType = typeof initialState.filter
 const usersReducer = (state = initialState, action: ActionsType): initialStateUsersType => {
     switch (action.type) {
         case 'sn/users/FOLLOW':
@@ -67,6 +71,9 @@ const usersReducer = (state = initialState, action: ActionsType): initialStateUs
                     ? [...state.followingInProgress, action.id] // в массив followingInProgress передается id usera на которого кликнули подписку
                     : state.followingInProgress.filter(elem => elem !== action.id) //после отработки api.js в контейнерном методе changeSubscriptionStatus становится isFetching false и данные с followingInProgress с айди польз удаляются   
             }
+            case 'SN/USERS/SET_FILTER': {
+                return {...state, filter: action.payload}
+            }
         default:
             return state
 
@@ -94,7 +101,9 @@ export const actions = {
     },
     toggleFollowingProgress: (id: number, isFetching: boolean) => {
         return { type: 'sn/users/TOGGLE_IS_FOLLOWING_PROGRESS', id, isFetching } as const
-    }
+    },
+    setFilter: (filter: FilterType) => ({type: 'SN/USERS/SET_FILTER', payload: filter} as const),
+
 }
 type ThunkType = BaseThunkType<ActionsType>
 
@@ -110,11 +119,12 @@ type ThunkType = BaseThunkType<ActionsType>
 // type GetStateType = () => AppStateType
 // type DispatchType = Dispatch<ActionsType>  --- сделали с помощью ThunkAction<Promise<void>, AppStateType, unknown, ActionsType> 
 
-export const getUsersThunkCreator = (currentPage: number, pageSize: number): ThunkType => {
+export const getUsersThunkCreator = (currentPage: number, pageSize: number, filter: FilterType): ThunkType => {
     return async (dispatch, getState) => {
         dispatch(actions.toggleIsFetching(true))
         dispatch(actions.setCurrentPage(currentPage))
-        let data = await usersAPI.getUsers(currentPage, pageSize)
+        dispatch(actions.setFilter(filter))
+        let data = await usersAPI.getUsers(currentPage, pageSize, filter.term, filter.friend)
         dispatch(actions.toggleIsFetching(false))
         dispatch(actions.setUsers(data.items))
         dispatch(actions.setTotalUsersCount(data.totalCount))

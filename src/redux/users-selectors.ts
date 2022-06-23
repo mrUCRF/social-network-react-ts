@@ -30,6 +30,9 @@ export const getFollowingInProgress = (state: AppStateType) => {
 export const getPortionSize = (state: AppStateType) => {
     return state.usersPage.portionSize
 }
+export const getUsersFilter = (state: AppStateType) => {
+    return state.usersPage.filter
+}
 
 // export const superSelector = createSelector(getUsers, getPageSize, getTotalUsersCount, getCurrentPage, getIsFetching, getFollowingInProgress, ////
 // (users, pageSize, totalUsersCount, currentPage, isFetching, followingInProgress) => {

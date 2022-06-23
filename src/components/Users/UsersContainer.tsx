@@ -72,17 +72,18 @@ class UsersContainer extends React.Component<PropsType> { //React.Component<Prop
         return <>
             {this.props.isFetching ? <Preloader /> : null} {/* условие запуска прелоадера */}
 
-            <Users totalItemCount={this.props.totalItemCount} /* прокидываем количество пользователей которое лягля в стейт из АПИ */
-                pageSize={this.props.pageSize} /* размер юзеров на странице (неизменно указан в стейте) */
-                currentPage={this.props.currentPage} /* прокидываем со стейта данные о выбранной странице (дефолт знач 1) */
-                onPageChanged={this.onPageChanged} /* прокидываем метод с контейнера для работы с онклик (оклик передавать будет событие) */
-                users={this.props.users} /* прокидываем обьек юзерс со стейта (туда он пришел с апи через компонентдидмаунт) */
-                follow={this.props.follow} /* прокидываем экш креатор с редьюсера который меняет булево значение */
-                unfollow={this.props.unfollow} /* прокидываем экш креатор с редьюсера который меняет булево значение */
-                changeSubscriptionStatus={this.changeSubscriptionStatus}
-                //toggleFollowingProgress={this.props.toggleFollowingProgress}
-                followingInProgress={this.props.followingInProgress}
-                portionSize={this.props.portionSize}
+            <Users 
+            // totalItemCount={this.props.totalItemCount} /* прокидываем количество пользователей которое лягля в стейт из АПИ */
+            //     pageSize={this.props.pageSize} /* размер юзеров на странице (неизменно указан в стейте) */
+            //     currentPage={this.props.currentPage} /* прокидываем со стейта данные о выбранной странице (дефолт знач 1) */
+            //     onPageChanged={this.onPageChanged} /* прокидываем метод с контейнера для работы с онклик (оклик передавать будет событие) */
+            //     users={this.props.users} /* прокидываем обьек юзерс со стейта (туда он пришел с апи через компонентдидмаунт) */
+            //     follow={this.props.follow} /* прокидываем экш креатор с редьюсера который меняет булево значение */
+            //     unfollow={this.props.unfollow} /* прокидываем экш креатор с редьюсера который меняет булево значение */
+            //     changeSubscriptionStatus={this.changeSubscriptionStatus}
+            //     //toggleFollowingProgress={this.props.toggleFollowingProgress}
+            //     followingInProgress={this.props.followingInProgress}
+            //     portionSize={this.props.portionSize}
             />
         </>
     }

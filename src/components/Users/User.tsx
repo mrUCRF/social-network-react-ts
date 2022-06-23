@@ -2,26 +2,30 @@ import React from "react";
 import styles from "./users.module.css"
 import userPhoto from '../../assets/images/219986.png'
 import { NavLink } from "react-router-dom";
-import Paginator from "../common/Paginator/Paginator.tsx"
+// import Paginator from "../common/Paginator/Paginator.tsx"
+import { UsersType } from "../../types/types";
 
-// type PropsType = {
-//     user:
-//     followingInProgress:
-//     changeSubscriptionStatus:
-// }
+type PropsType = {
+    user: UsersType
+    followingInProgress: Array<number>
+    changeSubscriptionStatus: (userId: number, followed:boolean) => void
+}
 
-const User = ({user, followingInProgress, changeSubscriptionStatus}) => { 
+const User: React.FC<PropsType> = ({user, followingInProgress, changeSubscriptionStatus}) => { 
     return (
         <div>
             <span>
                 <div>
                     <NavLink to={'/profile/' + user.id}>  {/* при наводе на аватар формируется адрес юзера для перехода на его стр */}
-                        <img src={user.photos.small != null ? user.photos.small : userPhoto} alt='error' className={styles.userAvatar} />
+                        <img src={user.photos.small != null 
+                            ? user.photos.small 
+                            : userPhoto} alt='error' className={styles.userAvatar} />
                     </NavLink>
                 </div>
                 <div>
 
-                    {user.followed ? <button disabled={followingInProgress.some(id => id === user.id)} onClick={() => { // при усл булевого значения свойства юзера фолловед, меняется статус кнопки
+                    {user.followed 
+                    ? <button disabled={followingInProgress.some(id => id === user.id)} onClick={() => { // при усл булевого значения свойства юзера фолловед, меняется статус кнопки
                         changeSubscriptionStatus(user.id, user.followed)
 
                         //вызываем метод с редьюсера для изменения статуса подписки прогруженых юзеров и отображения
@@ -39,8 +43,8 @@ const User = ({user, followingInProgress, changeSubscriptionStatus}) => {
                         //         }
 
                         //     })
-                    }}>Unfollow</button> : <button disabled={followingInProgress.some(id => id === user.id)} onClick={() => {
-                        changeSubscriptionStatus(user.id, user.followed)
+                    }}>Unfollow</button> : <button disabled={followingInProgress.some(id => id === user.id)} 
+                    onClick={() => {changeSubscriptionStatus(user.id, user.followed)
 
                         //вызываем метод с редьюсера для изменения статуса поодписки прогруженых юзеров и отображения
                         // axios.post(`https://social-network.samuraijs.com/api/1.0/follow/${u.id}`, {},

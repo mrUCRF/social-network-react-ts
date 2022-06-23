@@ -1,32 +1,84 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./users.module.css"
 import userPhoto from '../../assets/images/219986.png'
 import { NavLink } from "react-router-dom";
-import Paginator from "../common/Paginator/Paginator.tsx"
+// import Paginator from "../common/Paginator/Paginator.tsx"
 import User from "./User"
 import { UsersType } from "../../types/types";
+import { useDispatch, useSelector } from "react-redux";
+import {useHistory} from 'react-router-dom'
+import * as queryString from 'querystring'
+import { getCurrentPage, getFollowingInProgress, getPageSize, getPortionSize, getTotalUsersCount, getUsers, getUsersFilter } from "../../redux/users-selectors";
+import { getUsersThunkCreator } from "../../redux/users-reducer";
 
-type PropsType = {
-    totalItemCount: number
-    pageSize: number
-    portionSize: number
-    currentPage: number
-    onPageChanged: (pageNumber: number) => void  //вызывается но ничего не возвращает
-    followingInProgress: (userId: number) => void //userId number, потом покадает в стейт в массив юзеров
-    changeSubscriptionStatus: (id: number, subscrStatus: boolean) => void  //принимает два свойства но ничего не возвращает
-    users: Array<UsersType>
+type PropsType = {  
 }
+type QueryParamsType = { term?: string; page?: string; friend?: string }
+
+const Users: React.FC<PropsType> = (props) => {
+    const users = useSelector(getUsers)
+    const totalUsersCount = useSelector(getTotalUsersCount)
+    const currentPage = useSelector(getCurrentPage)
+    const pageSize = useSelector(getPageSize)
+    const filter = useSelector(getUsersFilter)
+    const followingInProgress = useSelector(getFollowingInProgress)
+
+    const dispatch = useDispatch()
+    const history = useHistory()
+
+    useEffect(() => {
+        const parsed = queryString.parse(history.location.search.substr(1)) as QueryParamsType
+
+        let actualPage = currentPage
+        let actualFilter = filter
+
+        if (!!parsed.page) actualPage = Number(parsed.page)
 
 
+        if (!!parsed.term) actualFilter = {...actualFilter, term: parsed.term as string}
 
-const Users: React.FC<PropsType> = ({currentPage, onPageChanged, totalItemCount, pageSize, portionSize, followingInProgress, changeSubscriptionStatus, users }) => {
+        switch(parsed.friend) {
+            case "null":
+                actualFilter = {...actualFilter, friend: null}
+                break;
+            case "true":
+                actualFilter = {...actualFilter, friend: true}
+                break;
+            case "false":
+                actualFilter = {...actualFilter, friend: false}
+                break;
+        }
 
-    // let pagesCount = Math.ceil(props.totalUsersCount / props.pageSize)  //округливаем в большую сторону из редюс тотюзкаунт /  пейд сайз
-    // let pages = []   //созд массив под страницы пользователей
-    // for (let i = 1; i <= pagesCount; i++) {  // создаем под условия страницы равные количеству юзеров и колво отобр юзеров на каждой стр
-    //     pages.push(i) /// пушим (создаем) количество обьектов массива которое будет = колву страниц пользователей
-    // }
-    // ИСПОЛЬЗУЕМ ПАГИНАТОР
+        dispatch(requestUsers(actualPage, pageSize, actualFilter))
+    }, [])
+
+    useEffect(() => {
+        const query: QueryParamsType = {}
+
+        if (!!filter.term) query.term = filter.term
+        if (filter.friend !== null) query.friend = String(filter.friend)
+        if (currentPage !== 1) query.page = String(currentPage)
+
+        history.push({
+            pathname: '/developers',
+            search: queryString.stringify(query)
+        })
+    }, [filter, currentPage])
+
+
+    const onPageChanged = (pageNumber: number) => {
+        dispatch(getUsersThunkCreator(pageNumber, pageSize, filter))
+    }
+    const onFilterChanged = (filter: FilterType) => {
+        dispatch(getUsersThunkCreator(1, pageSize, filter))
+    }
+    const follow = (userId: number) => {
+        dispatch(follow(userId));
+    }
+    const unfollow = (userId: number) => {
+        dispatch(unfollow(userId));
+    }
+
 
     return <div>
 
@@ -38,9 +90,10 @@ const Users: React.FC<PropsType> = ({currentPage, onPageChanged, totalItemCount,
 
         </div> */}
         {/* ТЕПЕРЬ ИСПОЛЬЗУЕМ ПАГИНАТОР */}
-        <Paginator currentPage={currentPage} 
+        <Paginator 
+        currentPage={currentPage} 
         onPageChanged={onPageChanged} 
-        totalItemCount={totalItemCount} 
+        totalUsersCount={totalUsersCount} 
         pageSize={pageSize} 
         portionSize={portionSize}
         />  

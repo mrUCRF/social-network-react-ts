@@ -4,8 +4,8 @@ import { GetItemsType, instatnse, APIResponseType } from './api'
 
 export const usersAPI = {
 
-    getUsers(currentPage: number, pageSize: number) {
-        return instatnse.get<GetItemsType>(`users?page=${currentPage}&count=${pageSize}`)
+    getUsers(currentPage: number, pageSize: number, term: string = '', friend: null | boolean = null) {
+        return instatnse.get<GetItemsType>(`users?page=${currentPage}&count=${pageSize}&term=${term}`+ (friend === null ? '' : `&friend=${friend}`))
         .then((response) => {
             return response.data
         })
