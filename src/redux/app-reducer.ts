@@ -1,10 +1,8 @@
 import { Dispatch } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
 //import { authAPI, usersAPI } from '../api/api'
-
-import { ThunkAction } from 'redux-thunk';
-import internal from 'stream';
-import { headerLoginProfileThunk } from './auth-reducer.ts';
-import { AppStateType, InferActionsTypes } from './redux-store';
+import { headerLoginProfileThunk } from "./auth-reducer";
+import { AppStateType, BaseThunkType, InferActionsTypes } from "./redux-store";
 
 //const INITIALIZED_SUCCES = 'SN/APP/INITIALIZED_SUCCES';   //метод наименования редакс дак, для предотвращения конфликтов названий экшнов
 
@@ -33,10 +31,11 @@ const appReducer = (state = initialState, action: ActionsType): InitialStateRedu
 }
 }
 //type ThunkType = ThunkAction<Promise<void>, AppStateType, unknown, InitializedSuccesActionType>
+// type ThunkType = BaseThunkType<ActionsType>
 export const initializeThunk = () => {
-    return (dispatch) => {
+    return (dispatch: any) => {
         let promise = dispatch(headerLoginProfileThunk())
-        Promise.all([promise])
+         Promise.all([promise])
         .then( () => {   ///когда все промисы зарезолвятся то диспатчим succes экшн криейтор
             dispatch(actions.setInitializedSucces())
         })

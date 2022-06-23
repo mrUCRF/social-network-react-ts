@@ -1,4 +1,4 @@
-import { TypeOf } from "yup";
+// import { TypeOf } from "yup";
 import { BaseThunkType, InferActionsTypes } from "./redux-store";
 
 // const UPDATE_NEW_MESSAGE = 'sn/dialog/UPDATE-NEW-MESSAGE'

@@ -3,9 +3,9 @@ import React from "react";
 import { Formik, Form, Field, ErrorMessage } from 'formik'
 import * as yup from 'yup'
 import { connect } from "react-redux";
-import { initialStateAuthType, loginThunk, ThunkType } from "../../redux/auth-reducer.ts";
-import { Redirect } from "react-router-dom";
-import { AppStateType } from "../../redux/redux-store.ts";
+import { initialStateAuthType, loginThunk } from "../../redux/auth-reducer";
+import { Navigate } from "react-router-dom";
+import { AppStateType } from "../../redux/redux-store";
 //import { propTypes } from "redux-form";
 
 
@@ -81,7 +81,7 @@ type LoginFormikPropsType = {
 }
 const Login: React.FC<mapStateToPropsType & mapDispatchPropsType> = ({ isAuth, loginThunk,  captchaUrl}) => {
     if (isAuth) {
-        return <Redirect to={"/profile"} />
+        return <Navigate to={"/profile"} />
     }
 
     return (

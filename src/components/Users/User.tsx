@@ -10,7 +10,7 @@ import Paginator from "../common/Paginator/Paginator.tsx"
 //     changeSubscriptionStatus:
 // }
 
-let User = ({user, followingInProgress, changeSubscriptionStatus}) => { 
+const User = ({user, followingInProgress, changeSubscriptionStatus}) => { 
     return (
         <div>
             <span>

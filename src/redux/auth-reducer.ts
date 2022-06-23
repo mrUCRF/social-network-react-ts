@@ -1,11 +1,12 @@
 import { ThunkAction } from 'redux-thunk';
-import { ResulCodeEnum, ResultCodeCaptchaReqired } from '../api/api.ts';
-import { authAPI } from '../api/auth-api.ts';
-import { securityAPI } from '../api/security-api.ts';
-import { AppStateType, BaseThunkType, InferActionsTypes } from './redux-store';
+import { number } from 'yup';
+import {ResultCodeForCapcthaEnum, ResultCodesEnum} from "../api/api";
+import { authAPI } from "../api/auth-api";
+import { securityAPI } from "../api/security-api";
+import { AppStateType, BaseThunkType, InferActionsTypes } from "./redux-store";
 
 let initialState = {
-    userId: 0 as number,
+    userId: null as number | null,
     email: null as string | null,
     login: null as string | null,
     isAuth: false,
@@ -35,7 +36,7 @@ const authReducer = (state = initialState, action: ActionsType) => {
 }
 
 export const actions = {
-    setAuthUserData: (userId: number, email: string | null, login: string | null, isAuth: boolean, captchaUrl: string | null) => {
+    setAuthUserData: (userId: number | null, email: string | null, login: string | null, isAuth: boolean, captchaUrl: string | null) => {
         return { type: 'sn/auth/SET_USER_DATA', data: { userId, email, login, isAuth, captchaUrl } } as const
     },
     getCaptchaUrlSucces: (url: string) => {
@@ -49,7 +50,7 @@ type ThunkType = BaseThunkType<ActionsType> // прописываем тип о�
 export const headerLoginProfileThunk = (): ThunkType => { //рефакторинг с помощью async await
         return async (dispatch) => {
             let responseData = await authAPI.getAuthData()
-            if (responseData.resultCode === ResulCodeEnum.Succes) {
+            if (responseData.resultCode === ResultCodesEnum.Success) {
                 let { id, email, login } = responseData.data
                 dispatch(actions.setAuthUserData(id, email, login, true, '')) //заполняем данными локальный стейт с апи
             }
@@ -58,10 +59,10 @@ export const headerLoginProfileThunk = (): ThunkType => { //рефакторин
 export const loginThunk = (email: string, password: string, rememberMe: boolean, captchaUrl: string): ThunkType => {  //делаем запрос с задаными на авторизацию и диспатчим обновление данных с апи в стейт
         return async (dispatch) => {
             let data = await authAPI.login(email, password, rememberMe, captchaUrl)
-            if (data.resultCode === ResulCodeEnum.Succes) {
+            if (data.resultCode === ResultCodesEnum.Success) {
                 dispatch(headerLoginProfileThunk())   //если получилось залогинится, то диспатчим санку с прогрузкой моих данных
             } else {
-                if (data.resultCode === ResultCodeCaptchaReqired.CaptchaIsRequired) {
+                if (data.resultCode === ResultCodeForCapcthaEnum.CaptchaIsRequired) {
                     dispatch(getCaptchaUrlThunk())
                     alert(data.messages)
                 } else {

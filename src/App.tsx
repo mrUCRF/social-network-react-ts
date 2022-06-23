@@ -1,8 +1,8 @@
 import React, { Component, Suspense } from 'react';
 import './App.css';
 import Navbar from './components/Navbar/Navbar';
-import News from "./components/News/News.tsx";
-import Music from "./components/Music/Music.tsx";
+import News from "./components/News/News";
+import Music from "./components/Music/Music";
 import Settings from "./components/Settings/Settings";
 //import DialogsContainer from './components/Dialogs/DialogsContainer';
 //import UsersContainer from './components/Users/UsersContainer';
@@ -13,26 +13,31 @@ import { initializeThunk } from "./redux/app-reducer"
 import { connect } from 'react-redux';
 import Preloader from './components/common/Preloader/Preloader';
 import { compose } from "redux";
-import store from "./redux/redux-store";
+import store, { AppStateType } from "./redux/redux-store";
 import { Provider } from "react-redux";
-import { Redirect, Switch, withRouter, HashRouter, Route, BrowserRouter } from "react-router-dom";
+import { Navigate, Routes, useNavigate, HashRouter, Route, BrowserRouter } from "react-router-dom";
 const DialogsContainer = React.lazy( () => import("./components/Dialogs/DialogsContainer"))
 const ProfileContainer = React.lazy( () => import("./components/Profile/ProfileContainer"))
 const UsersContainer = React.lazy( () => import("./components/Users/UsersContainer"))
 
+type MapPropsType = ReturnType<typeof mapStateToProps>
+type DispatchPropsType = {
+  initializeThunk: () => void
+}
 
 
-class App extends Component {
-  handleCatchAllError = (promiseRejectionEvent) => {
-alert(promiseRejectionEvent)
-console.error(promiseRejectionEvent)
+class App extends Component<MapPropsType & DispatchPropsType> {
+  handleCatchAllError = (e: PromiseRejectionEvent) => {
+alert(e)
+console.error(e)
   }
+
   componentDidMount() {
     this.props.initializeThunk()
-    window.addEventListener("unhandlerejection", this.promiseRejectionEvent) 
+    window.addEventListener('unhandledrejection', this.handleCatchAllError) 
   }
 componentWillUnmount() {
-  window.removeEventListener("unhandlerejection", this.promiseRejectionEvent)
+  window.removeEventListener('unhandledrejection', this.handleCatchAllError)
 }
   render() {
     if (!this.props.initialized) {
@@ -48,26 +53,20 @@ componentWillUnmount() {
         <div className='app-wrapper-content'>
        
           <Suspense fallback={<Preloader />}>
-          <Switch>
-          <Route path='/' exact><Redirect to='/profile'/></Route>          
-          <Route path="/dialogs" render={() => {
-          return <DialogsContainer />
-          }} />
+          <Routes>
+          <Route path='/' element><Navigate to='/profile'/></Route>          
+          <Route path="/dialogs" element={<DialogsContainer />} />
 
-          <Route path={`/profile/:userId?`} render={() => {
-          return <ProfileContainer />
-         }}/>
+          <Route path={`/profile/:userId?`} element={<ProfileContainer />}/>
 
-          <Route path="/users" render={() => {
-          return <UsersContainer />
-         } }/>
+          <Route path="/users" element={<UsersContainer />} />
 
-          <Route path="/login" render={() => <Login />} />
-          <Route path="/news" render={News} />
-          <Route path="/music" render={Music} />
-          <Route path="/settings" render={Settings} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/news" element={<News />} />
+          <Route path="/music" element={<Music />} />
+          <Route path="/settings" element={<Settings />} />
           {/* <Route path="*" render={<div>404 NOT FOUND</div>} /> */}
-          </Switch>
+          </Routes>
           </Suspense>
           
         </div>
@@ -77,22 +76,24 @@ componentWillUnmount() {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: AppStateType) => ({
   initialized: state.app.initialized
 })
 
-let AppContainer = compose(
-  withRouter,
+let AppContainer = compose<React.ComponentType>(
+  useNavigate,
   connect(mapStateToProps, { initializeThunk }))(App);
 
 const SamuraiJsApp = (props) => {
 
 //if BrowserRouter then we write basename={process.env.PUBLIC_URL}
-  return <BrowserRouter>  
+  return (
+  <BrowserRouter>  
     <Provider store={store}>
       <AppContainer />
     </Provider>
   </BrowserRouter>
+  )
 }
 
 export default SamuraiJsApp

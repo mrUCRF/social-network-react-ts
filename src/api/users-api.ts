@@ -1,4 +1,4 @@
-import { GetItemsType, instatnse, ResponseType } from './api.ts'
+import { GetItemsType, instatnse, APIResponseType } from './api'
 
 
 
@@ -13,7 +13,7 @@ export const usersAPI = {
 
     unfollow(userId: number) {
         return (
-            instatnse.delete<ResponseType>(`follow/${userId}`).then((response) => {
+            instatnse.delete<APIResponseType>(`follow/${userId}`).then((response) => {
                 return response.data
             })
         )
@@ -21,7 +21,7 @@ export const usersAPI = {
 
     follow(userId: number) {
         return (
-            instatnse.post<ResponseType>(`follow/${userId}`).then((response) => {
+            instatnse.post<APIResponseType>(`follow/${userId}`).then((response) => {
                 return response.data
             })
         )

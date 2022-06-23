@@ -1,8 +1,8 @@
 
 import { Dispatch } from "redux";
 import { ThunkAction } from "redux-thunk";
-import { string } from "yup";
-import { profileAPI } from "../api/profile-api.ts";
+// import { string } from "yup";
+import { profileAPI } from "../api/profile-api";
 
 import { contactsType, initialStatePostType, photosType, profileType } from "../types/types";
 import { AppStateType, InferActionsTypes } from "./redux-store";
@@ -127,17 +127,22 @@ export const updateUserStatusThunk = (status: string): ThunkType => { // сан�
 export const savePhotoThunk = (file: File): ThunkType => {
     return async (dispatch) => {
         let data = await profileAPI.savePhoto(file)
-        dispatch(actions.savePhotoSucces(data.photos))
+        if(data.resultCode === 0) {
+            dispatch(actions.savePhotoSucces(data.data.photos))
+        }
+       
     }
 }
 
 
 type saveProfileDataThunkPropetryType = {
-    aboutMe: string | null
-    contacts: contactsType
-    fullName: string | null
-    lookingForAJob: boolean
+    userId: number;
+    aboutMe: string | null;
+    contacts: contactsType;
+    fullName: string | null;
+    lookingForAJob: boolean;
     lookingForAJobDescription: string | null
+    photos: photosType
 }
 
 export const saveProfileDataThunk = (dataProfile: saveProfileDataThunkPropetryType): ThunkType => {

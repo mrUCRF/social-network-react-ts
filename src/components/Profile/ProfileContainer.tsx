@@ -2,7 +2,7 @@ import { connect } from "react-redux"
 import Profile from "./Profile"
 import React from "react";
 import { getUserDataThunk, getUserStatusThunk, updateUserStatusThunk, savePhotoThunk, saveProfileDataThunk } from '../../redux/profile-reducer.ts'
-import { withRouter } from "react-router-dom";
+// import { withRouter } from "react-router-dom";
 //import withAuthRedirect from '../../hoc/AuthRedirect'
 import { compose } from "redux";
 
@@ -61,7 +61,7 @@ let mapStateToProps = (state) => ({
     userId: state.auth.userId
 })
 export default compose(
-    withRouter,
+    // withRouter,
     connect(mapStateToProps, { getUserStatusThunk, getUserDataThunk, updateUserStatusThunk, savePhotoThunk, saveProfileDataThunk }), // 3. потом этой
      // 2. потом этой
     //withAuthRedirect // 1. сначала оборач этой функц (отключили залогиненый режим)

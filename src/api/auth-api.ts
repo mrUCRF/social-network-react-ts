@@ -1,5 +1,5 @@
-import { instatnse, ResulCodeEnum, ResultCodeCaptchaReqired } from "./api.ts"
-import { ResponseType } from "./api"
+import { APIResponseType, instatnse, ResultCodeForCapcthaEnum, ResultCodesEnum } from "./api"
+
 
 type getAuthDataResponseType = {
         id: number
@@ -9,16 +9,23 @@ type getAuthDataResponseType = {
 type loginResponseDataType = {
         userId: number
 }
-
+type MeResponseDataType = {
+    id: number
+    email: string
+    login: string
+}
+type LoginResponseDataType = {
+    userId: number
+}
 
 export const authAPI = {
     getAuthData() {
-        return instatnse.get<ResponseType<getAuthDataResponseType, ResulCodeEnum | ResultCodeCaptchaReqired>>(`auth/me`).then((response) => {
+        return instatnse.get<APIResponseType<MeResponseDataType>>(`auth/me`).then((response) => {
             return response.data
         });
     },
     login (email: string, password: string, rememberMe = false , captcha: null | string = null)  {
-        return instatnse.post<ResponseType<loginResponseDataType>>(`auth/login`, { email, password, rememberMe, captcha }).then((response => {
+        return instatnse.post<APIResponseType<LoginResponseDataType, ResultCodesEnum | ResultCodeForCapcthaEnum>>(`auth/login`, { email, password, rememberMe, captcha }).then((response => {
             return response.data
         }))
     },

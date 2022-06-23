@@ -8,12 +8,13 @@ export const instatnse = axios.create({     ///настройка аксиос
     headers: { "API-KEY": "43ab35d3-a913-4ff3-b373-4c376aa7e8b5" },
 })
 
-export enum ResultCodeCaptchaReqired {
-    CaptchaIsRequired = 10
+export enum ResultCodesEnum {
+    Success = 0,
+    Error = 1
 }
-export enum ResulCodeEnum {
-Succes = 0,
-Error = 1,
+
+export enum ResultCodeForCapcthaEnum {
+    CaptchaIsRequired = 10
 }
 
 export type GetItemsType = {
@@ -21,7 +22,7 @@ export type GetItemsType = {
     totalCount: number
     error: string | null
 }
-export type ResponseType<D = {}, RC = ResulCodeEnum> = {    //дженерик тип который нужно уточнять - общий тип для респонсов с сервера
+export type APIResponseType<D = {}, RC = ResultCodesEnum> = {  //дженерик тип который нужно уточнять - общий тип для респонсов с сервера
     data: D
     messages: Array<string>
     resultCode: RC
@@ -32,6 +33,6 @@ type MeResponseType = {
         email: string
         login: string
     }
-    resultCode: ResulCodeEnum
+    resultCode: ResultCodesEnum
     messages: Array<string>
 }

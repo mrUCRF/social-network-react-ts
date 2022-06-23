@@ -1,4 +1,4 @@
-import { instatnse } from "./api.ts"
+import { instatnse } from "./api"
 
 type getCaptchaURLType = {
     url: string

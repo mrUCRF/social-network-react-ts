@@ -1,7 +1,7 @@
 //import { setCurrentPage } from './users-reducer';
-import {  UsersType } from '../types/types';
-import { BaseThunkType, InferActionsTypes } from './redux-store';
-import { usersAPI } from '../api/users-api.ts';
+import {  UsersType } from "../types/types";
+import { BaseThunkType, InferActionsTypes } from "./redux-store";
+import { usersAPI } from "../api/users-api";
 
 // const FOLLOW = 'FOLLOW';
 // const UNFOLLOW = 'UNFOLLOW';

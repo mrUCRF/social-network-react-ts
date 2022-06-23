@@ -1,7 +1,7 @@
 
 import { createField, Input } from "../../common/FormControls/FormControls"
 import React, { useState } from "react";
-import Preloader from "../../common/Preloader/Preloader.tsx";
+// import Preloader from "../../common/Preloader/Preloader.tsx";
 import s from "./ProfileInfo.module.css"
 import ProfileStatusWithHooks from './ProfileStatusWithHooks'
 import userPhoto from '../../../assets/images/219986.png'

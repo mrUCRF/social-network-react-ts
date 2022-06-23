@@ -1,9 +1,10 @@
 import { connect } from "react-redux";
-import { actions, initialStateDialogType } from '../../redux/dialog-reducer.tsx';
-import Dialogs from "./Dialogs.tsx";
-import withAuthRedirect from '../../hoc/AuthRedirect.tsx'
+import { actions, initialStateDialogType } from '../../redux/dialog-reducer';
+import Dialogs from "./Dialogs";
+import withAuthRedirect from '../../hoc/AuthRedirect'
 import { compose } from "redux";
 import { AppStateType } from "../../redux/redux-store";
+import React from "react";
 
 
 
@@ -38,10 +39,12 @@ import { AppStateType } from "../../redux/redux-store";
 type mapStateToPropsType = {
     dialogPage: initialStateDialogType
 }
-const mapStateToProps = (state : AppStateType) => ({/// connect в свойства засунет store.dialogPage(dialog-reducer) (с redux-store.js) в mapStateToProps
-    dialogPage: state.dialogPage
-})   
-    
+const mapStateToProps = (state: AppStateType) => {/// connect в свойства засунет store.dialogPage(dialog-reducer) (с redux-store.js) в mapStateToProps
+    return {
+        dialogPage: state.dialogPage
+    }
+}
+
 // type mapDispatchToPropsType = {
 //     btnAddMessage: (value: string) => void
 //     postChangeMessage: (text: string) => void
@@ -65,7 +68,7 @@ type mapDispatchToPropsType = {
 
 
 
-export default compose(
-    connect<mapStateToPropsType, mapDispatchToPropsType, AppStateType>(mapStateToProps, {...actions}), // 2 потом оборачивает этой функцией
+export default compose<React.ComponentType>(
+    connect(mapStateToProps, { ...actions }), // 2 потом оборачивает этой функцией
     withAuthRedirect  // 1 сначала оборачивает этой функц
 )(Dialogs)
